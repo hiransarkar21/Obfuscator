@@ -18,6 +18,10 @@ class MainWindow(QWidget):
         self.secondary_heading_font.setWordSpacing(2)
         self.secondary_heading_font.setLetterSpacing(QFont.AbsoluteSpacing, 1)
 
+        self.paragraph_font = QFont("Poppins", 13)
+        self.paragraph_font.setWordSpacing(2)
+        self.paragraph_font.setLetterSpacing(QFont.AbsoluteSpacing, 1)
+
         self.screen_size = QApplication.primaryScreen().availableSize()
         self.login_screen_width = self.screen_size.width() // 2.7
         self.login_screen_height = self.screen_size.height() // 2
@@ -34,8 +38,8 @@ class MainWindow(QWidget):
         self.master_layout = QVBoxLayout()
         self.header_layout = QVBoxLayout()
         self.body_layout = QVBoxLayout()
-        self.child_email_layout = QVBoxLayout()
-        self.child_password_layout = QVBoxLayout()
+        self.child_email_layout = QHBoxLayout()
+        self.child_password_layout = QHBoxLayout()
         self.footer_layout = QHBoxLayout()
 
         # widgets
@@ -47,9 +51,38 @@ class MainWindow(QWidget):
         self.modules_and_libraries_used_label.setFont(self.secondary_heading_font)
         self.modules_and_libraries_used_label.setText("PyQt5 | Python-Obfuscator | MySQL")
 
+        self.email_address_label = QLabel()
+        self.email_address_label.setFont(self.paragraph_font)
+        self.email_address_label.setText("Email : ")
+
+        self.get_email_address = QLineEdit()
+        self.get_email_address.setFont(self.paragraph_font)
+        self.get_email_address.setPlaceholderText(" email address ...")
+        self.get_email_address.setFixedSize(int(self.width() // 2), int(self.height() // 10))
+        self.get_email_address.setStyleSheet("""QLineEdit{border-radius: 20px; padding-right: 15px; 
+        padding-left: 15px;}""")
+
+        self.password_label = QLabel()
+        self.password_label.setFont(self.paragraph_font)
+        self.password_label.setText("Password : ")
+
+        self.get_user_password = QLineEdit()
+        self.get_user_password.setFont(self.paragraph_font)
+        self.get_user_password.setPlaceholderText(" password ...")
+        self.get_user_password.setEchoMode(QLineEdit.Password)
+        self.get_user_password.setFixedSize(int(self.width() // 2), int(self.height() // 10))
+        self.get_user_password.setStyleSheet("""QLineEdit{border-radius: 20px; padding-right: 15px; 
+        padding-left: 15px;}""")
+
         # adding widgets to respective layouts
         self.header_layout.addWidget(self.welcome_label)
         self.header_layout.addWidget(self.modules_and_libraries_used_label)
+
+        self.child_email_layout.addWidget(self.email_address_label)
+        self.child_email_layout.addWidget(self.get_email_address)
+
+        self.child_password_layout.addWidget(self.password_label)
+        self.child_password_layout.addWidget(self.get_user_password)
 
         # adding child email and password layout to parent body_layout
         self.body_layout.addLayout(self.child_email_layout)
