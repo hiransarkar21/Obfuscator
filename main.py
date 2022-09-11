@@ -1,5 +1,5 @@
 import sys
-import login
+from interfaces import login
 from PyQt5.QtWidgets import QApplication
 
 
