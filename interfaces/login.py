@@ -114,3 +114,4 @@ class MainWindow(QWidget):
         from interfaces import obfuscator
         self.obfuscator_window = obfuscator.ObfuscatorWindow()
         self.obfuscator_window.show()
+        self.close()
