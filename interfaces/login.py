@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 
 
 # master class
@@ -9,12 +9,12 @@ class MainWindow(QWidget):
         super(MainWindow, self).__init__()
 
         # global attributes
-        self.heading_font = QFont("Poppins", 20)
+        self.heading_font = QFont("Poppins", 18)
         self.heading_font.setBold(True)
         self.heading_font.setWordSpacing(2)
         self.heading_font.setLetterSpacing(QFont.AbsoluteSpacing, 1)
 
-        self.secondary_heading_font = QFont("Poppins", 18)
+        self.secondary_heading_font = QFont("Poppins", 16)
         self.secondary_heading_font.setWordSpacing(2)
         self.secondary_heading_font.setLetterSpacing(QFont.AbsoluteSpacing, 1)
 
@@ -32,12 +32,15 @@ class MainWindow(QWidget):
 
     def window_configuration(self):
         self.setFixedSize(int(self.login_screen_width), int(self.login_screen_height))
+        self.setWindowTitle("Login to - Python Obfuscator")
 
     def user_interface(self):
         # parent and their respective child layouts
         self.master_layout = QVBoxLayout()
+        self.master_layout.setContentsMargins(10, 60, 10, 10)
         self.header_layout = QVBoxLayout()
         self.body_layout = QVBoxLayout()
+        self.body_layout.setContentsMargins(40, 10, 40, 10)
         self.child_email_layout = QHBoxLayout()
         self.child_password_layout = QHBoxLayout()
         self.footer_layout = QHBoxLayout()
@@ -58,7 +61,7 @@ class MainWindow(QWidget):
         self.get_email_address = QLineEdit()
         self.get_email_address.setFont(self.paragraph_font)
         self.get_email_address.setPlaceholderText(" email address ...")
-        self.get_email_address.setFixedSize(int(self.width() // 2), int(self.height() // 10))
+        self.get_email_address.setFixedSize(int(self.width() // 1.7), int(self.height() // 10))
         self.get_email_address.setStyleSheet("""QLineEdit{border-radius: 20px; padding-right: 15px; 
         padding-left: 15px;}""")
 
@@ -70,13 +73,19 @@ class MainWindow(QWidget):
         self.get_user_password.setFont(self.paragraph_font)
         self.get_user_password.setPlaceholderText(" password ...")
         self.get_user_password.setEchoMode(QLineEdit.Password)
-        self.get_user_password.setFixedSize(int(self.width() // 2), int(self.height() // 10))
+        self.get_user_password.setFixedSize(int(self.width() // 1.7), int(self.height() // 10))
         self.get_user_password.setStyleSheet("""QLineEdit{border-radius: 20px; padding-right: 15px; 
         padding-left: 15px;}""")
 
+        self.login_button = QPushButton()
+        self.login_button.setFont(self.paragraph_font)
+        self.login_button.setText(" Login ")
+        self.login_button.setFixedSize(int(self.width() // 4), int(self.height() // 9))
+        self.login_button.setStyleSheet("""QPushButton{border-radius: 25px; background-color: green; color: white;}""")
+
         # adding widgets to respective layouts
-        self.header_layout.addWidget(self.welcome_label)
-        self.header_layout.addWidget(self.modules_and_libraries_used_label)
+        self.header_layout.addWidget(self.welcome_label, alignment=Qt.AlignHCenter)
+        self.header_layout.addWidget(self.modules_and_libraries_used_label, alignment=Qt.AlignHCenter)
 
         self.child_email_layout.addWidget(self.email_address_label)
         self.child_email_layout.addWidget(self.get_email_address)
@@ -84,13 +93,18 @@ class MainWindow(QWidget):
         self.child_password_layout.addWidget(self.password_label)
         self.child_password_layout.addWidget(self.get_user_password)
 
+        self.footer_layout.addWidget(self.login_button)
+
         # adding child email and password layout to parent body_layout
         self.body_layout.addLayout(self.child_email_layout)
         self.body_layout.addLayout(self.child_password_layout)
 
         # adding header, body and footer layout to master_layout
         self.master_layout.addLayout(self.header_layout)
+        self.master_layout.addStretch()
         self.master_layout.addLayout(self.body_layout)
+        self.master_layout.addStretch()
         self.master_layout.addLayout(self.footer_layout)
+        self.master_layout.addStretch()
 
         self.setLayout(self.master_layout)
