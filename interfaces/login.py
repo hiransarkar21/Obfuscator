@@ -81,6 +81,7 @@ class MainWindow(QWidget):
         self.login_button.setFont(self.paragraph_font)
         self.login_button.setText(" Login ")
         self.login_button.setFixedSize(int(self.width() // 4), int(self.height() // 9))
+        self.login_button.clicked.connect(self.open_obfuscator_window)
         self.login_button.setStyleSheet("""QPushButton{border-radius: 25px; background-color: green; color: white;}""")
 
         # adding widgets to respective layouts
@@ -108,3 +109,8 @@ class MainWindow(QWidget):
         self.master_layout.addStretch()
 
         self.setLayout(self.master_layout)
+
+    def open_obfuscator_window(self):
+        from interfaces import obfuscator
+        self.obfuscator_window = obfuscator.ObfuscatorWindow()
+        self.obfuscator_window.show()
