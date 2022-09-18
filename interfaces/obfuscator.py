@@ -68,7 +68,7 @@ class ObfuscatorWindow(QWidget):
         self.get_target_file_name.setReadOnly(True)
         self.get_target_file_name.setPlaceholderText("click browse button ...")
         self.get_target_file_name.setFixedSize(int(self.width() // 1.5), int(self.height() // 14))
-        self.get_target_file_name.setStyleSheet("""QLineEdit{border-radius: 5px; padding-right: 10px;
+        self.get_target_file_name.setStyleSheet("""QLineEdit{border-radius: 15px; padding-right: 10px;
         padding-left: 10px;}""")
 
         self.browse_button = QPushButton()
@@ -76,7 +76,7 @@ class ObfuscatorWindow(QWidget):
         self.browse_button.setText("Browse")
         self.browse_button.clicked.connect(self.browse_button_clicked)
         self.browse_button.setFixedSize(int(self.width() // 7), int(self.height() // 14))
-        self.browse_button.setStyleSheet("""QPushButton{color: white; background-color: black;}""")
+        self.browse_button.setStyleSheet("""QPushButton{color: white; background-color: black; border-radius: 15px;}""")
 
         self.additional_options_label = QLabel()
         self.additional_options_label.setFont(self.paragraph_font)
@@ -111,7 +111,7 @@ class ObfuscatorWindow(QWidget):
         self.ready_set_go_button = QPushButton()
         self.ready_set_go_button.setFont(self.paragraph_font)
         self.ready_set_go_button.setText("Ready! Set! Go !")
-        self.ready_set_go_button.setFixedSize(int(self.width() // 3), int(self.height() // 10))
+        self.ready_set_go_button.setFixedSize(int(self.width() // 3), int(self.height() // 12))
         self.ready_set_go_button.clicked.connect(self.ready_set_go_button_clicked)
         self.ready_set_go_button.setStyleSheet(
             """QPushButton{border-radius: 30px; background-color: green; color: white;}""")
@@ -122,6 +122,7 @@ class ObfuscatorWindow(QWidget):
 
         self.child_target_file_layout_browse.addWidget(self.get_target_file_name, alignment=Qt.AlignLeft)
         self.child_target_file_layout_browse.addWidget(self.browse_button)
+        self.child_target_file_layout_browse.addStretch()
 
         self.additional_options_layout.addSpacing(10)
         self.additional_options_layout.addWidget(self.one_liner_option)
