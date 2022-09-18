@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+import mysql.connector
 
 
 # master class
@@ -22,9 +23,15 @@ class MainWindow(QWidget):
         self.paragraph_font.setWordSpacing(2)
         self.paragraph_font.setLetterSpacing(QFont.AbsoluteSpacing, 1)
 
+        self.validation_status_font = QFont("Poppins", 12)
+        self.validation_status_font.setWordSpacing(2)
+        self.validation_status_font.setLetterSpacing(QFont.AbsoluteSpacing, 1)
+
         self.screen_size = QApplication.primaryScreen().availableSize()
         self.login_screen_width = self.screen_size.width() // 2.7
         self.login_screen_height = self.screen_size.height() // 2
+
+        self.showing_invalid_status = False
 
         # instance methods
         self.window_configuration()
@@ -37,7 +44,7 @@ class MainWindow(QWidget):
     def user_interface(self):
         # parent and their respective child layouts
         self.master_layout = QVBoxLayout()
-        self.master_layout.setContentsMargins(10, 60, 10, 10)
+        self.master_layout.setContentsMargins(40, 60, 40, 10)
         self.header_layout = QVBoxLayout()
         self.body_layout = QVBoxLayout()
         self.body_layout.setContentsMargins(40, 10, 40, 10)
@@ -77,6 +84,12 @@ class MainWindow(QWidget):
         self.get_user_password.setStyleSheet("""QLineEdit{border-radius: 20px; padding-right: 15px; 
         padding-left: 15px;}""")
 
+        self.validation_status_label = QLabel()
+        self.validation_status_label.setFont(self.validation_status_font)
+        self.validation_status_label.setText("Invalid Email or Password! Please check your details")
+        self.validation_status_label.setStyleSheet("""QLabel{color: red;}""")
+        self.validation_status_label.hide()
+
         self.login_button = QPushButton()
         self.login_button.setFont(self.paragraph_font)
         self.login_button.setText(" Login ")
@@ -99,6 +112,7 @@ class MainWindow(QWidget):
         # adding child email and password layout to parent body_layout
         self.body_layout.addLayout(self.child_email_layout)
         self.body_layout.addLayout(self.child_password_layout)
+        self.body_layout.addWidget(self.validation_status_label, alignment=Qt.AlignHCenter)
 
         # adding header, body and footer layout to master_layout
         self.master_layout.addLayout(self.header_layout)
@@ -111,7 +125,56 @@ class MainWindow(QWidget):
         self.setLayout(self.master_layout)
 
     def open_obfuscator_window(self):
-        from interfaces import obfuscator
-        self.obfuscator_window = obfuscator.ObfuscatorWindow()
-        self.obfuscator_window.show()
-        self.close()
+        self.email_address = self.get_email_address.text()
+        self.user_password = self.get_user_password.text()
+        user_authenticated = self.validate_user_authenticity()
+
+        if user_authenticated is True:
+            from interfaces import obfuscator
+            self.bulk_email_sender_window = obfuscator.ObfuscatorWindow()
+            self.bulk_email_sender_window.show()
+            self.close()
+
+        else:
+            if self.showing_invalid_status is False:
+                self.showing_invalid_status = True
+
+                self.validation_status_label.show()
+                self.body_layout.insertSpacing(2, 20)
+
+            else:
+                pass
+
+    def validate_user_authenticity(self):
+        # connecting to local MySQL database
+        master_database = mysql.connector.connect(
+            host="127.0.0.1",
+            user="root",
+            password="",
+            database="mousekatool"
+        )
+
+        database_cursor = master_database.cursor()
+
+        database_password_query = "SELECT password FROM users WHERE email='{user_email_address}'".format(
+            user_email_address=self.email_address)
+        database_membership_query = "SELECT membership FROM users WHERE email='{user_email_address}'".format(
+            user_email_address=self.email_address)
+
+        database_cursor.execute(database_password_query)
+        password_query_response = database_cursor.fetchone()
+
+        # checking if database password validates with entered password
+
+        try:
+            if password_query_response[0] == self.get_user_password.text():
+                database_cursor.execute(database_membership_query)
+                membership_query_response = database_cursor.fetchone()
+
+                if membership_query_response[0] in ["private", "extra"]:
+                    return True
+            else:
+                return False
+
+        except TypeError:
+            return False
