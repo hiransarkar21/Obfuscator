@@ -37,6 +37,7 @@ class ObfuscatorWindow(QWidget):
 
     def window_configurations(self):
         self.setFixedSize(int(self.obfuscator_screen_width), int(self.obfuscator_screen_height))
+        self.setWindowIcon(QIcon("assets//official_icon.ico"))
         self.setWindowTitle("Obfuscator")
 
     def user_interface(self):

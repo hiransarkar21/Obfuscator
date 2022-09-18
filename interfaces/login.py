@@ -39,6 +39,7 @@ class MainWindow(QWidget):
 
     def window_configuration(self):
         self.setFixedSize(int(self.login_screen_width), int(self.login_screen_height))
+        self.setWindowIcon(QIcon("assets//official_icon.ico"))
         self.setWindowTitle("Login to - Python Obfuscator")
 
     def user_interface(self):
